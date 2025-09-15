@@ -436,18 +436,16 @@ pub(crate) fn traverse_with_callbacks(
                         shift_stop.offset = (shift_stop.offset - start_offset) * scale_factor;
                     }
 
-                    // /* https://docs.microsoft.com/en-us/typography/opentype/spec/colr#sweep-gradients
-                    //  * "The angles are expressed in counter-clockwise degrees from
-                    //  * the direction of the positive x-axis on the design
-                    //  * grid. [...]  The color line progresses from the start angle
-                    //  * to the end angle in the counter-clockwise direction;" -
-                    //  * Convert angles and stops from counter-clockwise to clockwise
-                    //  * for the shader if the gradient is not already reversed due to
-                    //  * start angle being larger than end angle. */
-                    start_angle_scaled = 360.0 - start_angle_scaled;
-                    end_angle_scaled = 360.0 - end_angle_scaled;
-
-                    if start_angle_scaled >= end_angle_scaled {
+                    //  https://docs.microsoft.com/en-us/typography/opentype/spec/colr#sweep-gradients
+                    //  "The angles are expressed in counter-clockwise degrees from
+                    //  the direction of the positive x-axis on the design
+                    //  grid. [...]  The color line progresses from the start angle
+                    //  to the end angle in the counter-clockwise direction;" -
+                    //  We keep the gradient direction (counter-clockwise in the Y-up coordinate
+                    //  system), but reverse the gradient angles and color stops if the start angle
+                    //  is larger than end angle, to ensure the gradient has a positive angle
+                    //  delta.
+                    if start_angle_scaled > end_angle_scaled {
                         (start_angle_scaled, end_angle_scaled) =
                             (end_angle_scaled, start_angle_scaled);
                         resolved_stops.reverse();

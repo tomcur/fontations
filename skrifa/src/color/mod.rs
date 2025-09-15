@@ -163,10 +163,11 @@ pub enum Brush<'a> {
     },
     /// A sweep gradient, also called conical gradient. The color stops are
     /// normalized to the range from 0 to 1 and the returned angles are to be
-    /// interpreted in _clockwise_ direction (swapped from the meaning in the
-    /// font file).  The stop normalization may mean that the angles may be
-    /// larger or smaller than the range of 0 to 360. Note that only the range
-    /// from 0 to 360 degrees is to be drawn, see
+    /// interpreted in counter-clockwise direction in the Y-up coordinate
+    /// system. The stop normalization may mean that the angles may be larger
+    /// or smaller than the range of 0 to 360. The end angle is always larger
+    /// than or equal to the start angle. Note that only the range from 0 to
+    /// 360 degrees is to be drawn, see
     /// <https://learn.microsoft.com/en-us/typography/opentype/spec/colr#sweep-gradients>.
     SweepGradient {
         c0: Point<f32>,
